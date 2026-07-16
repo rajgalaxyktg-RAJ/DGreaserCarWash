@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Wash Shiner</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#f1f5f9;color:#1e293b}
+header{background:#0f172a;color:#fff;padding:20px;text-align:center}
+.logo{width:150px;height:150px;object-fit:contain;display:block;margin:0 auto 8px}
+header h1{margin:0}
+header p{color:#cbd5e1}
+.container{max-width:1500px;margin:20px auto;padding:0 15px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;margin-bottom:20px}
+.stat{background:#fff;padding:18px;text-align:center;border-radius:10px;box-shadow:0 3px 8px #00000012}
+.stat h2{margin:0}.stat p{color:#64748b}.green{color:#16a34a}.blue{color:#2563eb}
+.main{display:grid;grid-template-columns:1fr 3fr;gap:20px}
+.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 3px 8px #00000012}
+label{display:block;margin-top:12px;font-weight:bold}
+input,select{width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:6px;font-size:15px}
+button{border:0;padding:10px 12px;border-radius:6px;cursor:pointer;font-weight:bold}
+.entry-btn{width:100%;margin-top:20px;background:#16a34a;color:#fff;font-size:15px}
+.exit-btn{background:#dc2626;color:#fff}
+.delete-btn{background:#64748b;color:#fff;margin-left:4px}
+.print-btn{background:#2563eb;color:#fff;margin-left:4px}
+.report-box{background:#eff6ff;padding:15px;border-radius:8px;margin-bottom:15px}
+.report-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.daily-btn{background:#2563eb;color:#fff}.monthly-btn{background:#7c3aed;color:#fff}
+.search{margin-bottom:15px}.price-box{margin-top:12px;padding:12px;text-align:center;background:#f8fafc;font-weight:bold}
+.table-box{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:1400px}
+th,td{padding:11px;border-bottom:1px solid #e2e8f0;text-align:left}
+th{background:#e2e8f0}.inside{color:#16a34a;font-weight:bold}.completed{color:#64748b;font-weight:bold}
+.empty{text-align:center;padding:30px;color:#64748b}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.main{grid-template-columns:1fr}}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.report-buttons{grid-template-columns:1fr}}
+
+/* MOBILE APP STYLE */
+body{background:#eef2f7;padding-bottom:75px}
+header{position:relative;padding:12px 10px 16px;border-radius:0 0 22px 22px}
+.logo{width:92px;height:92px;margin-bottom:3px}
+header h1{font-size:22px;letter-spacing:.5px}
+header p{font-size:12px;margin:5px 0 0}
+.container{width:100%;margin:0 auto;padding:12px 10px 0}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.stat{padding:12px 6px;border-radius:14px}
+.stat h2{font-size:21px}.stat p{font-size:11px;margin:6px 0 0}
+.main{display:flex;flex-direction:column;gap:12px}
+.card{padding:14px;border-radius:16px}
+.card h2{font-size:18px;margin:2px 0 12px}
+input,select{padding:13px 11px;font-size:16px}
+label{font-size:13px;margin-top:10px}
+.entry-btn{padding:14px;border-radius:10px;font-size:15px}
+.price-box{border-radius:9px}
+.report-box{padding:11px;border-radius:12px}
+.report-buttons{grid-template-columns:1fr;gap:8px}
+.report-buttons button{padding:13px}
+.search{padding:13px 11px;border-radius:10px}
+.table-box{overflow:visible}
+table{min-width:0;width:100%;display:block}
+thead{display:none}
+tbody{display:block}
+tbody tr{display:block;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:11px;margin-bottom:10px}
+tbody td{display:block;border:0;padding:4px 0;font-size:13px}
+tbody td:nth-child(1)::before{content:"Customer: ";font-weight:bold}
+tbody td:nth-child(2)::before{content:"Vehicle: ";font-weight:bold}
+tbody td:nth-child(3)::before{content:"Type: ";font-weight:bold}
+tbody td:nth-child(4)::before{content:"Phone: ";font-weight:bold}
+tbody td:nth-child(5)::before{content:"Service: ";font-weight:bold}
+tbody td:nth-child(6)::before{content:"Amount: ";font-weight:bold}
+tbody td:nth-child(7)::before{content:"Entry: ";font-weight:bold}
+tbody td:nth-child(8)::before{content:"Exit: ";font-weight:bold}
+tbody td:nth-child(9)::before{content:"Status: ";font-weight:bold}
+tbody td:nth-child(10){padding-top:9px}
+tbody td:nth-child(10) button{padding:9px 10px;margin:3px 2px 0 0}
+.empty{padding:20px}
+@media (min-width:700px){
+body{padding-bottom:0}
+.container{max-width:1500px;padding:20px 15px}
+.main{display:grid;grid-template-columns:1fr 3fr;gap:20px}
+.stats{grid-template-columns:repeat(5,1fr);gap:15px}
+.logo{width:150px;height:150px}
+header h1{font-size:28px}
+header p{font-size:16px}
+.report-buttons{grid-template-columns:1fr 1fr}
+table{display:table;min-width:1400px}
+thead{display:table-header-group}
+tbody{display:table-row-group}
+tbody tr{display:table-row;background:transparent;border:0;padding:0;margin:0}
+tbody td{display:table-cell;padding:11px;border-bottom:1px solid #e2e8f0}
+tbody td::before{content:none!important}
+}
+
+</style>
+</head>
+<body>
+
+<header>
+<img src="logo.png" class="logo" alt="D Greaser Detailing Car Wash Logo">
+<h1>D GREASER DETAILING</h1>
+<p>CAR WASH • Customer Entry & Exit System</p>
+</header>
+
+<div class="container">
+
+<div class="stats">
+<div class="stat"><h2 id="totalCustomers">0</h2><p>Total Customers</p></div>
+<div class="stat"><h2 id="insideCustomers">0</h2><p>Currently Inside</p></div>
+<div class="stat"><h2 id="completedCustomers">0</h2><p>Completed</p></div>
+<div class="stat"><h2 class="green" id="totalEarnings">₹0</h2><p>Total Earnings</p></div>
+<div class="stat"><h2 class="blue" id="dailyEarnings">₹0</h2><p>Date Earnings</p></div>
+</div>
+
+<div class="main">
+
+<div class="card">
+<h2>➕ Customer Entry</h2>
+
+<form id="entryForm">
+
+<label>Customer Name</label>
+<input type="text" id="customerName" required>
+
+<label>Vehicle Number</label>
+<input type="text" id="vehicleNumber" required>
+
+<label>Vehicle Type</label>
+<select id="vehicleType">
+<option>Car</option>
+<option>SUV</option>
+<option>Van</option>
+<option>Other Big Vehicle</option>
+<option>Bike</option>
+<option>Scooty</option>
+</select>
+
+<label>Phone Number</label>
+<input type="text" id="phoneNumber">
+
+<label>Service</label>
+<select id="service">
+<option value="Basic Wash" data-price="350">Basic Wash - ₹350</option>
+<option value="Premium Wash" data-price="450">Premium Wash - ₹450</option>
+<option value="Interior Cleaning" data-price="500">Interior Cleaning - ₹500</option>
+<option value="Full Car Detailing" data-price="600">Full Car Detailing - ₹600</option>
+<option value="Other Big Vehicle" data-price="750">Other Big Vehicle - ₹750</option>
+<option value="Bike and Scooty" data-price="350">Bike and Scooty - ₹350</option>
+</select>
+
+<div class="price-box">Price: ₹<span id="servicePrice">350</span></div>
+
+<button class="entry-btn" type="submit">🚗 ENTER CUSTOMER</button>
+</form>
+</div>
+
+<div class="card">
+<h2>📋 Customer Entry & Exit</h2>
+
+<div class="report-box">
+<label>📅 Select Date</label>
+<input type="date" id="dateFilter">
+
+<label>📆 Select Month</label>
+<input type="month" id="monthFilter">
+
+<div class="report-buttons">
+<button class="daily-btn" id="dailyReportBtn">🖨️ PRINT DATE REPORT</button>
+<button class="monthly-btn" id="monthlyReportBtn">🖨️ PRINT MONTHLY REPORT</button>
+</div>
+</div>
+
+<input class="search" id="search" type="text" placeholder="🔍 Search customer or vehicle">
+
+<div class="table-box">
+<table>
+<thead>
+<tr>
+<th>Customer</th><th>Vehicle</th><th>Vehicle Type</th><th>Phone</th>
+<th>Service</th><th>Amount</th><th>Entry</th><th>Exit</th>
+<th>Status</th><th>Action</th>
+</tr>
+</thead>
+<tbody id="customerTable"></tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+"use strict";
+
+var customers = [];
+
+try {
+    var saved = localStorage.getItem("carWashCustomers");
+    customers = saved ? JSON.parse(saved) : [];
+    if (!Array.isArray(customers)) customers = [];
+} catch (e) {
+    customers = [];
+    localStorage.removeItem("carWashCustomers");
+}
+
+var entryForm = document.getElementById("entryForm");
+var customerTable = document.getElementById("customerTable");
+var search = document.getElementById("search");
+var service = document.getElementById("service");
+var servicePrice = document.getElementById("servicePrice");
+var dateFilter = document.getElementById("dateFilter");
+var monthFilter = document.getElementById("monthFilter");
+
+function getDate(date) {
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, "0");
+    var day = String(date.getDate()).padStart(2, "0");
+    return year + "-" + month + "-" + day;
+}
+
+function saveData() {
+    localStorage.setItem("carWashCustomers", JSON.stringify(customers));
+}
+
+service.addEventListener("change", function() {
+    var option = service.options[service.selectedIndex];
+    servicePrice.textContent = option.getAttribute("data-price");
+});
+
+entryForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    var option = service.options[service.selectedIndex];
+    var now = new Date();
+
+    var customer = {
+        id: Date.now(),
+        name: document.getElementById("customerName").value.trim(),
+        vehicle: document.getElementById("vehicleNumber").value.trim().toUpperCase(),
+        vehicleType: document.getElementById("vehicleType").value,
+        phone: document.getElementById("phoneNumber").value.trim(),
+        service: option.value,
+        amount: Number(option.getAttribute("data-price")),
+        entry: now.toLocaleString(),
+        entryDate: getDate(now),
+        exit: "",
+        exitDate: "",
+        status: "INSIDE"
+    };
+
+    customers.unshift(customer);
+    saveData();
+    entryForm.reset();
+    servicePrice.textContent = "350";
+    displayCustomers();
+    alert("Customer entry added successfully!");
+});
+
+function displayCustomers() {
+    var searchText = search.value.toLowerCase();
+    var selectedDate = dateFilter.value;
+
+    var filtered = customers.filter(function(customer) {
+        var searchMatch =
+            customer.name.toLowerCase().includes(searchText) ||
+            customer.vehicle.toLowerCase().includes(searchText);
+
+        var dateMatch =
+            selectedDate === "" || customer.entryDate === selectedDate;
+
+        return searchMatch && dateMatch;
+    });
+
+    customerTable.innerHTML = "";
+
+    if (filtered.length === 0) {
+        customerTable.innerHTML =
+            '<tr><td colspan="10" class="empty">No customers found</td></tr>';
+    }
+
+    filtered.forEach(function(customer) {
+        var row = document.createElement("tr");
+
+        row.innerHTML =
+            "<td>" + customer.name + "</td>" +
+            "<td><b>" + customer.vehicle + "</b></td>" +
+            "<td>" + customer.vehicleType + "</td>" +
+            "<td>" + (customer.phone || "-") + "</td>" +
+            "<td>" + customer.service + "</td>" +
+            "<td><b>₹" + customer.amount + "</b></td>" +
+            "<td>" + customer.entry + "</td>" +
+            "<td>" + (customer.exit || "-") + "</td>" +
+            '<td class="' + (customer.status === "INSIDE" ? "inside" : "completed") + '">' +
+            customer.status + "</td>" +
+            "<td>" +
+            (customer.status === "INSIDE"
+                ? '<button class="exit-btn" onclick="exitCustomer(' + customer.id + ')">EXIT</button>'
+                : "✔ Done") +
+            '<button class="print-btn" onclick="printIndividual(' + customer.id + ')">PRINT</button>' +
+            '<button class="delete-btn" onclick="deleteCustomer(' + customer.id + ')">DELETE</button>' +
+            "</td>";
+
+        customerTable.appendChild(row);
+    });
+
+    updateStats();
+}
+
+function exitCustomer(id) {
+    var customer = customers.find(function(item) {
+        return item.id === id;
+    });
+
+    if (!customer) return;
+
+    var now = new Date();
+    customer.exit = now.toLocaleString();
+    customer.exitDate = getDate(now);
+    customer.status = "COMPLETED";
+
+    saveData();
+    displayCustomers();
+}
+
+function deleteCustomer(id) {
+    var customer = customers.find(function(item) {
+        return item.id === id;
+    });
+
+    if (!customer) return;
+
+    if (confirm("Delete this entry?\n\n" + customer.name + " - " + customer.vehicle)) {
+        customers = customers.filter(function(item) {
+            return item.id !== id;
+        });
+
+        saveData();
+        displayCustomers();
+    }
+}
+
+function updateStats() {
+    document.getElementById("totalCustomers").textContent = customers.length;
+
+    document.getElementById("insideCustomers").textContent =
+        customers.filter(function(c) {
+            return c.status === "INSIDE";
+        }).length;
+
+    document.getElementById("completedCustomers").textContent =
+        customers.filter(function(c) {
+            return c.status === "COMPLETED";
+        }).length;
+
+    var total = customers
+        .filter(function(c) {
+            return c.status === "COMPLETED";
+        })
+        .reduce(function(sum, c) {
+            return sum + c.amount;
+        }, 0);
+
+    document.getElementById("totalEarnings").textContent = "₹" + total;
+
+    var selectedDate = dateFilter.value;
+
+    var daily = customers
+        .filter(function(c) {
+            return c.status === "COMPLETED" && c.exitDate === selectedDate;
+        })
+        .reduce(function(sum, c) {
+            return sum + c.amount;
+        }, 0);
+
+    document.getElementById("dailyEarnings").textContent =
+        "₹" + (selectedDate ? daily : 0);
+}
+
+function openPrintWindow(html, width, height) {
+    var win = window.open("", "_blank", "width=" + width + ",height=" + height);
+
+    if (!win) {
+        alert("Please allow popups in Chrome for this HTML file.");
+        return null;
+    }
+
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+
+    setTimeout(function() {
+        win.focus();
+        win.print();
+    }, 500);
+
+    return win;
+}
+
+function printIndividual(id) {
+    var customer = customers.find(function(item) {
+        return item.id === id;
+    });
+
+    if (!customer) return;
+
+    var html =
+        "<!DOCTYPE html><html><head><title>Receipt</title>" +
+        "<style>body{font-family:Arial;width:300px;margin:auto;padding:20px}" +
+        "h2{text-align:center}.line{border-top:1px dashed #000;margin:12px 0}" +
+        "p{margin:8px 0}.amount{text-align:center;font-size:24px;font-weight:bold}" +
+        ".thank{text-align:center;margin-top:20px}</style></head><body>" +
+        "<h2>🚗 CAR WASH SHINER</h2><div class='line'></div>" +
+        "<p><b>Customer:</b> " + customer.name + "</p>" +
+        "<p><b>Vehicle:</b> " + customer.vehicle + "</p>" +
+        "<p><b>Vehicle Type:</b> " + customer.vehicleType + "</p>" +
+        "<p><b>Service:</b> " + customer.service + "</p>" +
+        "<p><b>Entry:</b> " + customer.entry + "</p>" +
+        "<p><b>Exit:</b> " + (customer.exit || "Not Exited") + "</p>" +
+        "<div class='line'></div><div class='amount'>₹" + customer.amount +
+        "</div><div class='line'></div><p class='thank'>Thank You 🙏<br>Visit Again</p>" +
+        "</body></html>";
+
+    openPrintWindow(html, 400, 600);
+}
+
+function printDailyReport() {
+    var date = dateFilter.value;
+
+    if (!date) {
+        alert("Please select a date first.");
+        return;
+    }
+
+    var list = customers.filter(function(c) {
+        return c.status === "COMPLETED" && c.exitDate === date;
+    });
+
+    printReport("DAILY REPORT", date, list);
+}
+
+function printMonthlyReport() {
+    var month = monthFilter.value;
+
+    if (!month) {
+        alert("Please select a month first.");
+        return;
+    }
+
+    var list = customers.filter(function(c) {
+        return c.status === "COMPLETED" &&
+               c.exitDate &&
+               c.exitDate.indexOf(month) === 0;
+    });
+
+    printReport("MONTHLY REPORT", month, list);
+}
+
+function printReport(title, date, list) {
+    var total = list.reduce(function(sum, c) {
+        return sum + c.amount;
+    }, 0);
+
+    var rows = "";
+
+    list.forEach(function(c, index) {
+        rows +=
+            "<tr><td>" + (index + 1) + "</td>" +
+            "<td>" + c.name + "</td>" +
+            "<td>" + c.vehicle + "</td>" +
+            "<td>" + c.vehicleType + "</td>" +
+            "<td>" + c.service + "</td>" +
+            "<td>₹" + c.amount + "</td>" +
+            "<td>" + c.exit + "</td></tr>";
+    });
+
+    if (list.length === 0) {
+        rows = "<tr><td colspan='7'>No completed customers</td></tr>";
+    }
+
+    var html =
+        "<!DOCTYPE html><html><head><title>" + title + "</title>" +
+        "<style>body{font-family:Arial;padding:25px}h1,h2{text-align:center}" +
+        ".summary{display:flex;justify-content:space-around;margin:20px 0;padding:15px;background:#f1f5f9;font-size:18px}" +
+        "table{width:100%;border-collapse:collapse}th,td{border:1px solid #999;padding:8px;text-align:left}" +
+        "th{background:#e2e8f0}.total{text-align:right;font-size:22px;font-weight:bold;margin-top:20px}</style>" +
+        "</head><body><h1>🚗 CAR WASH SHINER</h1>" +
+        "<h2>" + title + "</h2><p style='text-align:center'>Date / Month: " + date + "</p>" +
+        "<div class='summary'><div><b>Completed Vehicles</b><br>" + list.length +
+        "</div><div><b>Total Earnings</b><br>₹" + total + "</div></div>" +
+        "<table><thead><tr><th>No</th><th>Customer</th><th>Vehicle</th>" +
+        "<th>Vehicle Type</th><th>Service</th><th>Amount</th><th>Exit Time</th></tr></thead>" +
+        "<tbody>" + rows + "</tbody></table>" +
+        "<div class='total'>TOTAL EARNINGS: ₹" + total + "</div>" +
+        "</body></html>";
+
+    openPrintWindow(html, 1000, 700);
+}
+
+search.addEventListener("input", displayCustomers);
+dateFilter.addEventListener("change", displayCustomers);
+document.getElementById("dailyReportBtn").addEventListener("click", printDailyReport);
+document.getElementById("monthlyReportBtn").addEventListener("click", printMonthlyReport);
+
+displayCustomers();
+</script>
+
+
+<div class="mobile-nav">
+<button onclick="window.scrollTo({top:0,behavior:'smooth'})">🏠<span>Home</span></button>
+<button onclick="document.getElementById('customerName').focus()">➕<span>Entry</span></button>
+<button onclick="document.getElementById('search').focus()">🔍<span>Search</span></button>
+</div>
+<style>
+.mobile-nav{display:none}
+@media(max-width:699px){
+.mobile-nav{display:flex;position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#0f172a;border-radius:16px;padding:7px;justify-content:space-around;box-shadow:0 5px 20px #00000030}
+.mobile-nav button{background:transparent;color:white;font-size:19px;padding:4px 18px}
+.mobile-nav span{display:block;font-size:10px;margin-top:2px}
+}
+</style>
+
+</body>
+</html>
