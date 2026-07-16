@@ -1,23 +1,18 @@
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-}
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
 
-android {
-    namespace = "com.dgreaser.carwash"
-    compileSdk = 35
-
-    defaultConfig {
-        applicationId = "com.dgreaser.carwash"
-        minSdk = 23
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.7.3")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21")
     }
 }
 
-dependencies {
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.webkit:webkit:1.12.1")
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
