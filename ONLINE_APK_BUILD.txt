@@ -1,0 +1,21 @@
+D GREASER ONLINE APK BUILD
+
+This project includes GitHub Actions automation.
+
+HOW TO BUILD APK ONLINE
+1. Create a GitHub account.
+2. Create a new repository.
+3. Upload ALL files from this project.
+4. Go to the Actions tab.
+5. Click "Build D Greaser APK".
+6. Click "Run workflow".
+7. Wait for the green check.
+8. Open the completed workflow.
+9. Scroll to Artifacts.
+10. Download "DGreaser-CarWash-APK".
+11. Extract it. The APK is inside.
+
+No Android Studio is required.
+
+IMPORTANT:
+The APK is a DEBUG APK for personal/internal use.
